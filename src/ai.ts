@@ -6,6 +6,15 @@ import config from "./config";
 import { AISDKProvider } from "./providers/ai-sdk";
 import { SAPAIProvider } from "./providers/sapaicore";
 
+// Helper to create Anthropic provider with structured outputs beta header
+// Required for Claude Opus 4.5 which needs the beta header for structured outputs
+const createAnthropicWithBetaHeader = () =>
+  createAnthropic({
+    headers: {
+      "anthropic-beta": "structured-outputs-2025-11-13",
+    },
+  });
+
 export enum AIProviderType {
   AI_SDK = "ai-sdk",
   SAP_AI_SDK = "sap-ai-sdk",
@@ -45,6 +54,15 @@ const LLM_MODELS: Record<AIProviderType, ModelConfig[]> = {
     {
       name: "claude-sonnet-4-5",
       createAi: createAnthropic,
+    },
+    // Claude Opus 4.5 - requires structured outputs beta header
+    {
+      name: "claude-opus-4-5-20251101",
+      createAi: createAnthropicWithBetaHeader,
+    },
+    {
+      name: "claude-opus-4-5",
+      createAi: createAnthropicWithBetaHeader,
     },
     // OpenAI
     {
