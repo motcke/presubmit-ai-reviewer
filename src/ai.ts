@@ -8,9 +8,11 @@ import { SAPAIProvider } from "./providers/sapaicore";
 
 // Helper to create Anthropic provider with structured outputs beta header
 // Required for Claude Opus 4.5 which needs the beta header for structured outputs
-const createAnthropicWithBetaHeader = () =>
+const createAnthropicWithBetaHeader = (settings?: Parameters<typeof createAnthropic>[0]) =>
   createAnthropic({
+    ...settings,
     headers: {
+      ...settings?.headers,
       "anthropic-beta": "structured-outputs-2025-11-13",
     },
   });
